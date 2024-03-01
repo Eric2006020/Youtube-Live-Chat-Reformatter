@@ -13,6 +13,7 @@ namespace Youtube_Live_Chat_Reformat
     {
         private Timer _timer;
         private readonly MainWindow window;
+        private bool pause;
         public Counter(MainWindow mainWindow)
         {
             window = mainWindow;
@@ -31,6 +32,10 @@ namespace Youtube_Live_Chat_Reformat
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (pause)
+            {
+                return;
+            }
             Dispatcher.Invoke(() =>
             {
                 LiteDatabase _liteDatabase = new LiteDatabase(window.liteDBString);
@@ -131,6 +136,24 @@ namespace Youtube_Live_Chat_Reformat
             ILiteCollection<ChatData> chat = _liteDatabase.GetCollection<ChatData>("chat");
             _ = chat.DeleteAll();
             _liteDatabase.Dispose();
+        }
+
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            pause = !pause;
+            if (pause)
+            {
+                pauseBtn.Content = "Start";
+            }
+            else
+            {
+                //clean history
+                LiteDatabase _liteDatabase = new LiteDatabase(window.liteDBString);
+                ILiteCollection<ChatData> chat = _liteDatabase.GetCollection<ChatData>("chat");
+                _ = chat.DeleteAll();
+                _liteDatabase.Dispose();
+                pauseBtn.Content = "Stop";
+            }
         }
     }
 }
