@@ -110,8 +110,13 @@ namespace Youtube_Live_Chat_Reformat
                 }
                 else
                 {
-                    grid.ItemsSource = list;
-                    Count.Content = list.Count();
+                    var result = list.AsEnumerable();
+                    if (showOnce.IsChecked ?? false)
+                    {
+                        result = result.GroupBy(x => x.User).Select(y => y.First());
+                    }
+                    grid.ItemsSource = result;
+                    Count.Content = result.Count();
                     List<CounterData> counters = new List<CounterData>();
                     counter.ItemsSource = counters;
                 }
