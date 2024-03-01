@@ -1,16 +1,11 @@
-﻿using CefSharp.DevTools.IndexedDB;
-using CefSharp;
+﻿using CefSharp;
 using CefSharp.Wpf;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Youtube_Live_Chat_Reformat
 {
-    internal class YoutubeService:IDisposable
+    internal class YoutubeService : IDisposable
     {
         private ChromiumWebBrowser browser;
         private string webPath;
@@ -38,7 +33,7 @@ namespace Youtube_Live_Chat_Reformat
                 if (File.Exists("Assets\\style.css"))
                 {
                     e.Frame.ExecuteJavaScriptAsync(@"const style = document.createElement('style');
-style.innerHTML = `"+ File.ReadAllText("Assets\\style.css") + @"`;
+style.innerHTML = `" + File.ReadAllText("Assets\\style.css") + @"`;
 document.head.appendChild(style);");
                 }
                 e.Frame.ExecuteJavaScriptAsync("document.getElementById(\"reaction-control-panel-overlay\").remove();");

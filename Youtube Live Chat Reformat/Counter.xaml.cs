@@ -1,21 +1,8 @@
 ﻿using LiteDB;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.PerformanceData;
 using System.Linq;
-using System.Text;
-
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Youtube_Live_Chat_Reformat
 {
@@ -25,35 +12,38 @@ namespace Youtube_Live_Chat_Reformat
     public partial class Counter : Window
     {
         private Timer _timer;
-        private MainWindow window;
+        private readonly MainWindow window;
         public Counter(MainWindow mainWindow)
         {
-            this.window = mainWindow;
+            window = mainWindow;
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _timer = new Timer();
-            _timer.Interval = 1000;
+            _timer = new Timer
+            {
+                Interval = 1000
+            };
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(()=>{
-                var _liteDatabase = new LiteDatabase(window.liteDBString);
-                var chat = _liteDatabase.GetCollection<ChatData>("chat");
-                var filters = filter.Text.Split(',').Select(x => x.Trim()).Where(x => x.Length > 0).ToList();
-                var list = chat.FindAll().ToList();
+            Dispatcher.Invoke(() =>
+            {
+                LiteDatabase _liteDatabase = new LiteDatabase(window.liteDBString);
+                ILiteCollection<ChatData> chat = _liteDatabase.GetCollection<ChatData>("chat");
+                List<string> filters = filter.Text.Split(',').Select(x => x.Trim()).Where(x => x.Length > 0).ToList();
+                List<ChatData> list = chat.FindAll().ToList();
                 if (filters.Count > 0)
                 {
-                    foreach (var filter in filters.ToList())
+                    foreach (string filter in filters.ToList())
                     {
                         if (filter.Contains("-"))
                         {
-                            var predict = filter.Split('-');
+                            string[] predict = filter.Split('-');
                             if (predict.Length > 1)
                             {
                                 if (!int.TryParse(predict[0], out int min))
@@ -64,20 +54,20 @@ namespace Youtube_Live_Chat_Reformat
                                 {
                                     continue;
                                 }
-                                filters.Remove(filter);
+                                _ = filters.Remove(filter);
                                 filters.AddRange(Enumerable.Range(min, max - min + 1).Select(x => x.ToString()));
                             }
                         }
                     }
-                    var result = list.Where((x) =>
+                    IEnumerable<ChatData> result = list.Where((x) =>
                     {
-                        foreach(var filter in filters.ToList())
+                        foreach (string filter in filters.ToList())
                         {
                             if (int.TryParse(filter, out int compare))
                             {
-                                if(int.TryParse(x.Comment, out int comment))
+                                if (int.TryParse(x.Comment, out int comment))
                                 {
-                                    if(compare == comment)
+                                    if (compare == comment)
                                     {
                                         return true;
                                     }
@@ -97,9 +87,9 @@ namespace Youtube_Live_Chat_Reformat
                     grid.ItemsSource = result;
                     Count.Content = result.Count();
                     List<CounterData> counters = new List<CounterData>();
-                    foreach(var filter in filters)
+                    foreach (string filter in filters)
                     {
-                        if(int.TryParse(filter, out int num))
+                        if (int.TryParse(filter, out int num))
                         {
                             counters.Add(new CounterData
                             {
@@ -127,14 +117,14 @@ namespace Youtube_Live_Chat_Reformat
                 }
                 _liteDatabase.Dispose();
             });
-            
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var _liteDatabase = new LiteDatabase(window.liteDBString);
-            var chat = _liteDatabase.GetCollection<ChatData>("chat");
-            chat.DeleteAll();
+            LiteDatabase _liteDatabase = new LiteDatabase(window.liteDBString);
+            ILiteCollection<ChatData> chat = _liteDatabase.GetCollection<ChatData>("chat");
+            _ = chat.DeleteAll();
             _liteDatabase.Dispose();
         }
     }
