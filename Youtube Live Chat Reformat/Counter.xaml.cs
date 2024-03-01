@@ -129,5 +129,13 @@ namespace Youtube_Live_Chat_Reformat
             });
             
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var _liteDatabase = new LiteDatabase(window.liteDBString);
+            var chat = _liteDatabase.GetCollection<ChatData>("chat");
+            chat.DeleteAll();
+            _liteDatabase.Dispose();
+        }
     }
 }
