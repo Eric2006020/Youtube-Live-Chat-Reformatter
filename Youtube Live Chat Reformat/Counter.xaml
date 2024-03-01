@@ -21,9 +21,9 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Input Keywords (Use , to seperate keywords and - to define numbers)"></Label>
         <TextBox Grid.Column="1" Grid.Row="0" x:Name="filter"/>
         <CheckBox Grid.Column="2" Grid.Row="0" Content="Show Once" x:Name="showOnce" Margin="5,5,0,0"/>
-        <Label Grid.Row="1" Content="Total Count"></Label>
+        <Label Grid.Row="1" Grid.Column="0" Content="Total Count"></Label>
         <Button Grid.Row="1" Grid.Column="2" Content="Clear Cache" Click="Button_Click"></Button>
-        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="Count"/>
+        <Label Grid.Row="1" Grid.Column="1" x:Name="Count"/>
         <DataGrid Grid.Row="2" Grid.ColumnSpan="3" x:Name="grid">
 
         </DataGrid>
