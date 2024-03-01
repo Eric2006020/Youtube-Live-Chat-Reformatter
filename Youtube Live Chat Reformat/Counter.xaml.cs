@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
@@ -14,6 +15,8 @@ namespace Youtube_Live_Chat_Reformat
         private Timer _timer;
         private readonly MainWindow window;
         private bool pause;
+        private List<CounterData> counters = new List<CounterData>();
+        private List<Chart> charts = new List<Chart>();
         public Counter(MainWindow mainWindow)
         {
             window = mainWindow;
@@ -36,6 +39,7 @@ namespace Youtube_Live_Chat_Reformat
             {
                 return;
             }
+            counters = new List<CounterData>();
             Dispatcher.Invoke(() =>
             {
                 LiteDatabase _liteDatabase = new LiteDatabase(window.liteDBString);
@@ -91,7 +95,6 @@ namespace Youtube_Live_Chat_Reformat
                     }
                     grid.ItemsSource = result;
                     Count.Content = result.Count();
-                    List<CounterData> counters = new List<CounterData>();
                     foreach (string filter in filters)
                     {
                         if (int.TryParse(filter, out int num))
@@ -122,12 +125,14 @@ namespace Youtube_Live_Chat_Reformat
                     }
                     grid.ItemsSource = result;
                     Count.Content = result.Count();
-                    List<CounterData> counters = new List<CounterData>();
                     counter.ItemsSource = counters;
+                }
+                foreach(var chart in charts)
+                {
+                    chart.UpdateChart(counters);
                 }
                 _liteDatabase.Dispose();
             });
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -154,6 +159,27 @@ namespace Youtube_Live_Chat_Reformat
                 _liteDatabase.Dispose();
                 pauseBtn.Content = "Stop";
             }
+        }
+
+        private void Pie_Chart_Click(object sender, RoutedEventArgs e)
+        {
+            Chart chart = new Chart("pie");
+            chart.Show();
+            chart.Closing += Chart_Closing;
+            charts.Add(chart);
+        }
+
+        private void Chart_Closing(object sender, CancelEventArgs e)
+        {
+            charts.Remove(sender as Chart);
+        }
+
+        private void Line_Chart_Click(object sender, RoutedEventArgs e)
+        {
+            Chart chart = new Chart("line");
+            chart.Show();
+            chart.Closing += Chart_Closing;
+            charts.Add(chart);
         }
     }
 }

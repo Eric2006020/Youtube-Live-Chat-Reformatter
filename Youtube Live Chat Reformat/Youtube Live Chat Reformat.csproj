@@ -74,6 +74,9 @@
     <Content Include="Assets\style.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Chart.xaml.cs">
+      <DependentUpon>Chart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ChatData.cs" />
     <Compile Include="CounterData.cs" />
     <Compile Include="Counter.xaml.cs">
@@ -84,6 +87,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="ResourceHandlerService.cs" />
+    <Page Include="Chart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -133,6 +140,9 @@
     </PackageReference>
     <PackageReference Include="LiteDB">
       <Version>5.0.19</Version>
+    </PackageReference>
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF">
+      <Version>2.0.0-rc2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

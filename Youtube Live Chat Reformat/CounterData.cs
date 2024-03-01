@@ -1,4 +1,6 @@
-﻿namespace Youtube_Live_Chat_Reformat
+﻿using LiveChartsCore.Defaults;
+
+namespace Youtube_Live_Chat_Reformat
 {
     public class CounterData
     {
