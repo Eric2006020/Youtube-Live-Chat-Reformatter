@@ -1,7 +1,10 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using System;
+using System.Collections.Specialized;
 using System.IO;
+using System.Security.Policy;
+using System.Web;
 
 namespace Youtube_Live_Chat_Reformat
 {
@@ -15,7 +18,13 @@ namespace Youtube_Live_Chat_Reformat
         public void InitChromium(string youtubeUrl, ChromiumWebBrowser browser)
         {
             this.browser = browser;
-            browser.Load(youtubeUrl);
+            Uri uri = new Uri(youtubeUrl);
+            NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
+            browser.Load("https://www.youtube.com/live_chat?is_popout=1&v=" + query.Get("v"));
+            if (File.Exists("debug.txt"))
+            {
+                browser.ShowDevTools();
+            }
             browser.JavascriptObjectRepository.Register("bound", new CefObject(this), true);
             browser.FrameLoadEnd += Browser_FrameLoadEnd;
             Console.WriteLine("Current stream YT url is " + youtubeUrl);
@@ -28,7 +37,7 @@ namespace Youtube_Live_Chat_Reformat
             {
                 browser.Load(webPath = e.Frame.Url);
             }
-            else if (e.Frame.Url == webPath || e.Frame.Url.StartsWith("https://studio.youtube.com/live_chat"))
+            else if (e.Frame.Url == webPath || e.Frame.Url.StartsWith("https://studio.youtube.com/live_chat") || e.Frame.Url.StartsWith("https://www.youtube.com/live_chat"))
             {
                 if (File.Exists("Assets\\style.css"))
                 {

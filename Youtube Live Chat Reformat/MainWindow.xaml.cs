@@ -3,6 +3,7 @@ using CefSharp.Wpf;
 using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -51,7 +52,7 @@ namespace Youtube_Live_Chat_Reformat
             try
             {
                 Uri uri = new Uri(Url);
-                System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
+                NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
                 _youtubeService = new YoutubeService();
                 liteDBString = "Filename=Temp\\" + query.Get("v") + ";Connection=shared";
                 _youtubeService.CommentReceived += _youtubeService_CommentReceived;

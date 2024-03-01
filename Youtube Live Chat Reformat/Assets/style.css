@@ -139,6 +139,7 @@ yt-live-chat-text-message-renderer #message * {
     font-family: "Fira Sans";
     font-size: 20px !important;
     line-height: 20px !important;
+    display: block;
 }
 
 
