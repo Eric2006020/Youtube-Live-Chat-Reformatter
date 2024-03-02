@@ -64,7 +64,25 @@ document.head.appendChild(style);");
                                     return;
                                 }
                         })(document.getElementsByTagName(""yt-live-chat-text-message-renderer""))
-                    }, 300);
+                    }, 50);
+                })()");
+
+                e.Frame.ExecuteJavaScriptAsync(@"(async function () {
+                    await CefSharp.BindObjectAsync('boundAsync', 'bound');
+                    var last = """";
+                    setInterval(function () {
+                        (function (t) {
+                            if (last != (cid = t[t.length - 1].id))
+                                for (var e = t.length; e--;) {
+                                    if (last == t[e].id) return last = cid;
+                                    let userName = t[e].querySelectorAll(""#author-name"")[0].textContent;
+                                    let amount = Number(t[e].querySelectorAll(""#purchase-amount-column"")[0].textContent.replace(/[^0-9\.]+/g,""""))
+                                    t[e].children[0].children[1].children[0].textContent && bound.onSuperChat(userName, t[e].children[0].children[1].children[0].textContent);
+                                    last = cid;
+                                    return;
+                                }
+                        })(document.getElementsByTagName(""yt-live-chat-paid-message-renderer""))
+                    }, 100);
                 })()");
             }
         }
@@ -91,13 +109,25 @@ document.head.appendChild(style);");
                     User = name
                 });
             }
+
+            public void onSuperChat(string name, string text, decimal scAmount)
+            {
+                service.CommentReceived?.Invoke(this, new CommentEvent
+                {
+                    Comment = text,
+                    User = name,
+                    SuperChat = true,
+                    SuperChatAmount = scAmount
+                });
+            }
         }
 
         public class CommentEvent : EventArgs
         {
             public string Comment { get; set; }
             public string User { get; set; }
-
+            public bool SuperChat { get; set; }
+            public decimal SuperChatAmount { get; set; }
         }
     }
 }

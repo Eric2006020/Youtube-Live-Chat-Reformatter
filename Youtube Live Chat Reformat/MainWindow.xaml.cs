@@ -20,6 +20,7 @@ namespace Youtube_Live_Chat_Reformat
         private YoutubeService _youtubeService;
         private string Url;
         public string liteDBString;
+        private Counter Counter;
         public MainWindow()
         {
             CefSettings settings = new CefSettings
@@ -54,9 +55,13 @@ namespace Youtube_Live_Chat_Reformat
                 Uri uri = new Uri(Url);
                 NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
                 _youtubeService = new YoutubeService();
-                liteDBString = "Filename=Temp\\" + query.Get("v") + ";Connection=shared";
+                liteDBString = "Filename=Temp\\" + query.Get("v") + ";Connection=shared; journal=false";
                 _youtubeService.CommentReceived += _youtubeService_CommentReceived;
                 _youtubeService.InitChromium(Url, browser);
+                if (Counter != null)
+                {
+                    Counter.Reset();
+                }
             }
             catch
             {
@@ -73,19 +78,36 @@ namespace Youtube_Live_Chat_Reformat
             ChatData last = list.Count() > 0 ? list.Last() : new ChatData();
             if (!(last.User == e.User && last.Comment == e.Comment))
             {
-                _ = collection.Insert(new ChatData
+                var insert = new ChatData
                 {
                     Comment = e.Comment,
-                    User = e.User
-                });
+                    User = e.User,
+                    SCAmount = e.SuperChat ? e.SuperChatAmount : 0
+                };
+                _ = collection.Insert(insert);
+                if (Counter != null)
+                {
+                    Counter.AddMessage(insert);
+                }
             }
             _liteDatabase.Dispose();
         }
 
         private void FilterWindow(object sender, RoutedEventArgs e)
         {
+            if(Counter != null)
+            {
+                return;
+            }
             Counter counter = new Counter(this);
+            Counter = counter;
+            counter.Closing += Counter_Closing;
             counter.Show();
+        }
+
+        private void Counter_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Counter = null;
         }
     }
 }

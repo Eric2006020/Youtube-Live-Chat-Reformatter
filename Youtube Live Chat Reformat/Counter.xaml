@@ -35,5 +35,7 @@
         </DataGrid>
         <Button Grid.Row="4" Grid.Column="1" Content="Pie Chart" Click="Pie_Chart_Click"></Button>
         <Button Grid.Row="4" Content="Line Chart" Click="Line_Chart_Click"></Button>
+        <Label Grid.Row="4" Grid.Column="2" Content="SC Count:"/>
+        <Label Grid.Row="4" Grid.Column="3" x:Name="SCAmount"/>
     </Grid>
 </Window>
