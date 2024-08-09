@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 
 namespace Youtube_Live_Chat_Reformat
@@ -41,15 +44,34 @@ namespace Youtube_Live_Chat_Reformat
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
         {
-
+            Border sp = sender as Border;
+            DoubleAnimation db = new DoubleAnimation();
+            //db.From = 12;
+            db.To = 30;
+            db.Duration = TimeSpan.FromSeconds(0.5);
+            db.AutoReverse = false;
+            db.RepeatBehavior = new RepeatBehavior(1);
+            sp.BeginAnimation(StackPanel.HeightProperty, db);
         }
 
+        private void StackPanel_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Border sp = sender as Border;
+            DoubleAnimation db = new DoubleAnimation();
+            //db.From = 12;
+            db.To = 2;
+            db.Duration = TimeSpan.FromSeconds(0.5);
+            db.AutoReverse = false;
+            db.RepeatBehavior = new RepeatBehavior(1);
+            sp.BeginAnimation(StackPanel.HeightProperty, db);
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _youtubeService?.Dispose();
             Url = UrlTextBox.Text;
+            FilterPanel.Visibility = Visibility.Visible;
             try
             {
                 Uri uri = new Uri(Url);

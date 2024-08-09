@@ -20,10 +20,7 @@ namespace Youtube_Live_Chat_Reformat
             Uri uri = new Uri(youtubeUrl);
             NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
             browser.Load("https://www.youtube.com/live_chat?is_popout=1&v=" + query.Get("v"));
-            if (File.Exists("debug.txt"))
-            {
-                browser.ShowDevTools();
-            }
+            browser.ShowDevTools();
             browser.JavascriptObjectRepository.Register("bound", new CefObject(this), true);
             browser.FrameLoadEnd += Browser_FrameLoadEnd;
             Console.WriteLine("Current stream YT url is " + youtubeUrl);
