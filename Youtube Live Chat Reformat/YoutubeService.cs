@@ -3,7 +3,6 @@ using CefSharp.Wpf;
 using System;
 using System.Collections.Specialized;
 using System.IO;
-using System.Security.Policy;
 using System.Web;
 
 namespace Youtube_Live_Chat_Reformat
@@ -81,16 +80,17 @@ namespace Youtube_Live_Chat_Reformat
                         })(document.getElementsByTagName(""yt-live-chat-paid-message-renderer""))
                     }, 100);
                 })()");
+
                 if (File.Exists("Assets\\style.css"))
                 {
                     e.Frame.ExecuteJavaScriptAsync(@"
-let escapeHTMLPolicy = trustedTypes.createPolicy(""forceInner"", {
-    createHTML: (to_escape) => to_escape
-})
-const style = document.createElement('style');
-style.id = 'custom-obs';
-style.innerHTML = escapeHTMLPolicy.createHTML(`" + File.ReadAllText("Assets\\style.css") + @"`);
-document.head.appendChild(style);");
+                        let escapeHTMLPolicy = trustedTypes.createPolicy(""forceInner"", {
+                            createHTML: (to_escape) => to_escape
+                        })
+                        const style = document.createElement('style');
+                        style.id = 'custom-obs';
+                        style.innerHTML = escapeHTMLPolicy.createHTML(`" + File.ReadAllText("Assets\\style.css") + @"`);
+                        document.head.appendChild(style);");
                 }
             }
         }
