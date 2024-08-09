@@ -49,7 +49,7 @@ namespace Youtube_Live_Chat_Reformat
                             if (last != (cid = t[t.length - 1].id))
                                 for (var e = t.length; e--;) {
                                     if (last == t[e].id) return last = cid;
-                                    t[e].children[1].children[3].textContent && bound.onText(t[e].children[1].children[1].children[1].textContent, t[e].children[1].children[3].textContent);
+                                    t[e].children[1].children[3].textContent && bound.onText(t[e].children[1].children[1].children[1].textContent, t[e].children[1].children[3].textContent, t[e].outerHTML);
                                     last = cid;
                                     return;
                                 }
@@ -70,7 +70,7 @@ namespace Youtube_Live_Chat_Reformat
                                     if (last == t[e].id) return last = cid;
                                     let userName = t[e].querySelectorAll(""#author-name"")[0].textContent;
                                     let amount = Number(t[e].querySelectorAll(""#purchase-amount-column"")[0].textContent.replace(/[^0-9\.]+/g,""""))
-                                    t[e].children[0].children[1].children[0].textContent && bound.onSuperChat(userName, t[e].children[0].children[1].children[0].textContent);
+                                    t[e].children[0].children[1].children[0].textContent && bound.onSuperChat(userName, t[e].children[0].children[1].children[0].textContent, t[e].outerHTML);
                                     last = cid;
                                     return;
                                 }
@@ -106,23 +106,25 @@ namespace Youtube_Live_Chat_Reformat
                 this.service = service;
             }
 
-            public void onText(string name, string text)
+            public void onText(string name, string text, string html)
             {
                 service.CommentReceived?.Invoke(this, new CommentEvent
                 {
                     Comment = text,
-                    User = name
+                    User = name,
+                    Html = html
                 });
             }
 
-            public void onSuperChat(string name, string text, decimal scAmount)
+            public void onSuperChat(string name, string text, decimal scAmount, string html)
             {
                 service.CommentReceived?.Invoke(this, new CommentEvent
                 {
                     Comment = text,
                     User = name,
                     SuperChat = true,
-                    SuperChatAmount = scAmount
+                    SuperChatAmount = scAmount,
+                    Html = html
                 });
             }
         }
@@ -133,6 +135,7 @@ namespace Youtube_Live_Chat_Reformat
             public string User { get; set; }
             public bool SuperChat { get; set; }
             public decimal SuperChatAmount { get; set; }
+            public string Html { get; set; }
         }
     }
 }
