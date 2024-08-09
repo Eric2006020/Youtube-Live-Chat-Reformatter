@@ -61,7 +61,7 @@ namespace Youtube_Live_Chat_Reformat
             Border sp = sender as Border;
             DoubleAnimation db = new DoubleAnimation();
             //db.From = 12;
-            db.To = 2;
+            db.To = 1;
             db.Duration = TimeSpan.FromSeconds(0.5);
             db.AutoReverse = false;
             db.RepeatBehavior = new RepeatBehavior(1);
