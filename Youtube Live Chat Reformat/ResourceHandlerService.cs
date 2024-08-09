@@ -10,7 +10,14 @@ namespace Youtube_Live_Chat_Reformat
         public IResourceHandler Create(IBrowser browser, IFrame frame, string schemeName, IRequest request)
         {
             string fullPath = Path.GetFullPath(Path.Combine("Assets", string.Join("\\", new Uri(request.Url).Segments.Where(x => x != "/"))));
-            return ResourceHandler.FromFilePath(fullPath);
+            try
+            {
+                return ResourceHandler.FromFilePath(fullPath);
+            }
+            catch
+            {
+                return ResourceHandler.FromByteArray(new byte[] { 0, 0 });
+            }
         }
     }
 }

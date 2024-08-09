@@ -136,10 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CefSharp.Wpf">
-      <Version>121.3.130</Version>
+      <Version>126.2.180</Version>
     </PackageReference>
     <PackageReference Include="LiteDB">
-      <Version>5.0.19</Version>
+      <Version>5.0.21</Version>
     </PackageReference>
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF">
       <Version>2.0.0-rc2</Version>

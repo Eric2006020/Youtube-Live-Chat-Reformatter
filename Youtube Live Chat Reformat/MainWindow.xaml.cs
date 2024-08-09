@@ -49,6 +49,7 @@ namespace Youtube_Live_Chat_Reformat
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _youtubeService?.Dispose();
+            browser.ShowDevTools();
             Url = UrlTextBox.Text;
             try
             {
